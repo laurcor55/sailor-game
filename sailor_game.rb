@@ -5,46 +5,21 @@ require_relative './lib/player'
 #Game window
 class SailorGame < Gosu::Window
   def initialize(width: 600, height:400)
+    print(rand(10))
     super width, height
-    @input = UserInput.new
     @background = Background.new
     @ship = Ship.new(300, 200)
-
   #  @ship.accelerate(1, 1)
   end
-
   
   def update
-    user_input = @input.update
     @background.update
-    @ship.update(user_input)
+    @ship.update
   end
   
   def draw
     @background.draw
     @ship.draw
-  end
-end
-
-class UserInput
-  def initialize
-    return "\0"
-  end
-
-  def update
-    if Gosu.button_down? Gosu::KbDown
-      return "down"
-    elsif Gosu.button_down? Gosu::KbUp
-      return "up"
-    elsif Gosu.button_down? Gosu::KbLeft
-      return "left"
-    elsif Gosu.button_down? Gosu::KbRight
-      return "right"
-    elsif Gosu.button_down? Gosu::KbSpace
-      return "speed"
-    else
-      return "\0"
-    end
   end
 end
 
@@ -58,34 +33,10 @@ class Ship
     @ship_image = Gosu::Image.new('pirate_doodle.png')
   end
 
-  
-
-  def update(user_input)
+  def update
     @x_position += @velocity * Math.cos(@direction) #Equation for horizontal velocity
     @y_position += @velocity * Math.sin(@direction) #Equation for vertical velocity
-
-    if user_input=="down"
-      if (@direction%(2*Math::PI))<Math::PI/2 || (@direction%(2*Math::PI))>3*Math::PI/2
-        @direction+= 0.1
-      else
-        @direction+= -0.1
-      end
-    elsif user_input=="up"
-      if (@direction%(2*Math::PI))<Math::PI/2 || (@direction%(2*Math::PI))>3*Math::PI/2
-        @direction+= -0.1
-      else
-        @direction+= 0.1
-      end
-    elsif user_input=="left"
-      @direction+= -0.11
-    elsif user_input=="right"
-      @direction+= 0.1
-    elsif user_input=="speed"
-      @velocity += 0.05
-    end
   end
-
-
 
   def draw
     @ship_image.draw_rot(
