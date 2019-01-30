@@ -1,7 +1,10 @@
 require_relative './lib/window'
 require_relative './lib/player'
 
+player = Player.new(300,300)
+window = Window.new(player)
 
+<<<<<<< HEAD
 #Game window
 class SailorGame < Gosu::Window
   def initialize(width: 600, height:400)
@@ -157,3 +160,6 @@ end
 
 game = SailorGame.new
 game.show
+=======
+window.show
+>>>>>>> 177c5a96de117b5b4976240cc2fb4527743b45b6
