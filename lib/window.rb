@@ -1,4 +1,5 @@
 require 'gosu'
+require_relative './school_of_fish'
 require_relative './input_control'
 
 class Window < Gosu::Window
@@ -7,16 +8,19 @@ class Window < Gosu::Window
     self.caption = 'Sailor Game'
     @player = player
     @input = InputControl.new(@player)
+    @fishies = SchoolOfFish.new( 300, 200)
   end
 
   def update
     dt = delta_time
     @input.update(dt)
     @player.update(dt) # update player
+    @fishies.update(dt)
   end
 
   def draw
     @player.draw # draw player
+    @fishies.draw
   end
 
   private
