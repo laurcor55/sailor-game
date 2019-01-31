@@ -1,8 +1,11 @@
 class Player
   MIN_HORIZONTAL_POSITION = 0
-  MAX_HORIZONTAL_POSITION = 620
+  MAX_HORIZONTAL_POSITION = 570
   MIN_VERTICAL_POSITION = 0
-  MAX_VERTICAL_POSITION = 460
+  MAX_VERTICAL_POSITION = 440
+
+  IMAGE_WIDTH = 70
+  IMAGE_HEIGHT = 40
 
   attr_accessor :velocity, :direction
 
@@ -15,6 +18,9 @@ class Player
     self.direction = 0 # and angle
 
     @image = Gosu::Image.new('media/player.png') # just a png of a circle
+    @vertical_scale = IMAGE_HEIGHT.to_f / @image.height
+    @horizontal_scale = IMAGE_WIDTH.to_f / @image.width
+
     @font = Gosu::Font.new(20) # for debugging
   end
 
@@ -47,7 +53,8 @@ class Player
       @x_position,
       @y_position,
       @z_position,
-      0.15, 0.15
+      @horizontal_scale,
+      @vertical_scale
     )
 
     @font.draw_text("velocity: #{self.velocity}\ndirection: #{self.direction}", 0, 0, 0)
