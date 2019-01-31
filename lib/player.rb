@@ -1,8 +1,8 @@
 class Player
-  MIN_HORIZONTAL_POSITION = 0
-  MAX_HORIZONTAL_POSITION = 620
-  MIN_VERTICAL_POSITION = 0
-  MAX_VERTICAL_POSITION = 445
+  MIN_HORIZONTAL_POSITION = 20
+  MAX_HORIZONTAL_POSITION = 625
+  MIN_VERTICAL_POSITION = 20
+  MAX_VERTICAL_POSITION = 460
 
   IMAGE_WIDTH = 40
   IMAGE_HEIGHT = 70
@@ -54,7 +54,7 @@ class Player
       @y_position,
       @z_position,
       self.direction*180/Math::PI+90,
-      0, 0,
+      0.5, 0.5,
       @horizontal_scale,
       @vertical_scale,
       
