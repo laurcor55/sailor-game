@@ -49,12 +49,15 @@ class Player
   end
 
   def draw
-    @image.draw(
+    @image.draw_rot(
       @x_position,
       @y_position,
       @z_position,
+      self.direction*180/Math::PI+180,
+      0.5, 0.5,
       @horizontal_scale,
-      @vertical_scale
+      @vertical_scale,
+      
     )
 
     @font.draw_text("velocity: #{self.velocity}\ndirection: #{self.direction}", 0, 0, 0)
