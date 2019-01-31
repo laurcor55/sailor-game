@@ -1,7 +1,5 @@
 class Waves
-  attr_accessor :velocity, :direction
-
-  def initialize(x, y)
+  def initialize
     @iteration = 1
     @wave1_image = Gosu::Image.new('media/wave1.png')
     @wave2_image = Gosu::Image.new('media/wave2.png')
@@ -10,7 +8,7 @@ class Waves
   end
 
   # apply velocity to the position
-  def update(dt)
+  def update
     @iteration += 1
     if (@iteration%50<25)
       @wave_offset=1
@@ -49,7 +47,7 @@ class Waves
         0.10, 0.10
       )
       
-      if jj==20
+      if jj==25
         break
       end
       jj+=1
