@@ -1,4 +1,12 @@
 class Player
+  MIN_HORIZONTAL_POSITION = 0
+  MAX_HORIZONTAL_POSITION = 570
+  MIN_VERTICAL_POSITION = 0
+  MAX_VERTICAL_POSITION = 440
+
+  IMAGE_WIDTH = 70
+  IMAGE_HEIGHT = 40
+
   attr_accessor :velocity, :direction
 
   def initialize(x, y)
@@ -10,6 +18,9 @@ class Player
     self.direction = 0 # and angle
 
     @image = Gosu::Image.new('media/player.png') # just a png of a circle
+    @vertical_scale = IMAGE_HEIGHT.to_f / @image.height
+    @horizontal_scale = IMAGE_WIDTH.to_f / @image.width
+
     @font = Gosu::Font.new(20) # for debugging
   end
 
@@ -34,15 +45,19 @@ class Player
     v_velocity = dt * self.velocity * Math.sin(self.direction)
     @x_position += h_velocity
     @y_position += v_velocity
-    halt if out_of_bounds?
+    limit_position
   end
 
   def draw
-    @image.draw(
+    @image.draw_rot(
       @x_position,
       @y_position,
       @z_position,
-      0.15, 0.15
+      self.direction*180/Math::PI+180,
+      0.5, 0.5,
+      @horizontal_scale,
+      @vertical_scale,
+      
     )
 
     @font.draw_text("velocity: #{self.velocity}\ndirection: #{self.direction}", 0, 0, 0)
@@ -50,7 +65,33 @@ class Player
 
   private
 
-    def out_of_bounds?
-      @x_position <= 0 || @x_position >= (640-20) || @y_position <= 0 || @y_position >= (480-20)
+    def limit_position
+      if @x_position < MIN_HORIZONTAL_POSITION
+        @x_position = MIN_HORIZONTAL_POSITION
+        set_horizontal_velocity 0
+      elsif @x_position > MAX_HORIZONTAL_POSITION
+        @x_position = MAX_HORIZONTAL_POSITION
+        set_horizontal_velocity 0
+      end
+
+      if @y_position < MIN_VERTICAL_POSITION
+        @y_position = MIN_VERTICAL_POSITION
+        set_vertical_velocity 0
+      elsif @y_position > MAX_VERTICAL_POSITION
+        @y_position = MAX_VERTICAL_POSITION
+        set_vertical_velocity 0
+      end
+    end
+
+    def set_horizontal_velocity(new_h_velocity)
+      v_velocity = self.velocity * Math.sin(self.direction)
+      self.velocity = Math.sqrt(new_h_velocity*new_h_velocity + v_velocity*v_velocity)
+      self.direction = Math.atan2(v_velocity, new_h_velocity)
+    end
+
+    def set_vertical_velocity(new_v_velocity)
+      h_velocity = self.velocity * Math.cos(self.direction)
+      self.velocity = Math.sqrt(h_velocity*h_velocity + new_v_velocity*new_v_velocity)
+      self.direction = Math.atan2(new_v_velocity, h_velocity)
     end
 end
