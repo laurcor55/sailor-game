@@ -17,6 +17,8 @@ class SchoolOfFish
   end
 
   def update(dt)
+    @x_position += 0.3*rand-0.3 
+    @y_position += 0.3*rand-0.3
     @rotation += dt*@rotation_speed
   end
 
