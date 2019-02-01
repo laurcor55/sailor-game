@@ -8,6 +8,8 @@ class SchoolOfFish
     @x_position = x
     @y_position = y
     @z_position = 0
+    @x_fish_speed = 0.1
+    @y_fish_speed = 0.1
 
     @rotation_speed = Math::PI / 50
     @rotation = 0
@@ -17,8 +19,13 @@ class SchoolOfFish
   end
 
   def update(dt)
-    @x_position += 0.3*rand-0.3 
-    @y_position += 0.3*rand-0.3
+    if (rand<0.01)
+      @x_fish_speed = 1*rand-0.5
+    elsif (rand<0.01)
+      @y_fish_speed = 1*rand-0.5
+    end
+    @x_position += @x_fish_speed
+    @y_position += @y_fish_speed
     @rotation += dt*@rotation_speed
   end
 
