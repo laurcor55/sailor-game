@@ -1,6 +1,5 @@
 class Waves
   def initialize
-    @iteration = 1
     @wave1_image = Gosu::Image.new('media/wave1.png')
     @wave2_image = Gosu::Image.new('media/wave2.png')
     @wave3_image = Gosu::Image.new('media/wave3.png')
@@ -9,42 +8,60 @@ class Waves
 
   # apply velocity to the position
   def update
-    @iteration += 1
-    if (@iteration%50<25)
-      @wave_offset=1
-    else
-      @wave_offset=0
-    end
+    current_time = Gosu::milliseconds()
+    @wave_offset_fast = 30*Math.sin(current_time*0.0006)
+    @wave_offset_slow = 25*Math.sin(current_time*0.0005)
   end
 
   def draw
     jj=0
     loop do
-      y_position_wave = jj*20
+      wave_size = 0.2
+      y_offset = 10
+      y_position_wave = jj*y_offset*7
+      
       
       @wave1_image.draw(
-        @wave_offset*5-10,
+        @wave_offset_fast-37,
         y_position_wave,
         0,
-        0.10, 0.10
+        wave_size, wave_size
       )
       @wave2_image.draw(
+        -3,
+        y_position_wave+y_offset,
         0,
-        y_position_wave+5,
-        0,
-        0.10, 0.10
+        wave_size, wave_size
       )
       @wave3_image.draw(
-        -@wave_offset*6,
-        y_position_wave+10,
+        -@wave_offset_slow-17,
+        y_position_wave+y_offset*2,
         0,
-        0.10, 0.10
+        wave_size, wave_size
       )
       @wave2_image.draw(
+        -25,
+        y_position_wave+y_offset*3,
         0,
-        y_position_wave+15,
+        wave_size, wave_size
+      )
+      @wave3_image.draw(
         0,
-        0.10, 0.10
+        y_position_wave+y_offset*4,
+        0,
+        wave_size, wave_size
+      )
+      @wave2_image.draw(
+        -34,
+        y_position_wave+y_offset*5,
+        0,
+        wave_size, wave_size
+      )
+      @wave3_image.draw(
+        -15,
+        y_position_wave+y_offset*6,
+        0,
+        wave_size, wave_size
       )
       
       if jj==25

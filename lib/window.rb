@@ -1,5 +1,6 @@
 require 'gosu'
 require_relative './input_control'
+require_relative './waves'
 
 
 class Window < Gosu::Window
