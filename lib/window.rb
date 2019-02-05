@@ -8,7 +8,7 @@ class Window < Gosu::Window
     self.caption = 'Sailor Game'
     @player = player
     @input = InputControl.new(@player)
-    @fishies = SchoolOfFish.new(300, 200)
+    @fishies = SchoolOfFish.new( 300, 200)
   end
 
   def update
