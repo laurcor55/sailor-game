@@ -37,7 +37,7 @@ class SchoolOfFish
         @z_position,
         (tile_index % 2 == 0 ? @rotation : -1 * @rotation) / (1 + tile_index),
         0.5,0.5,1,1,
-        0xFF75A6C6
+        0x50_FF75A6C6
       )
     end
   end
