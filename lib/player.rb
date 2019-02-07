@@ -1,11 +1,11 @@
 class Player
-  MIN_HORIZONTAL_POSITION = 0
-  MAX_HORIZONTAL_POSITION = 570
-  MIN_VERTICAL_POSITION = 0
-  MAX_VERTICAL_POSITION = 440
+  MIN_HORIZONTAL_POSITION = 20
+  MAX_HORIZONTAL_POSITION = 625
+  MIN_VERTICAL_POSITION = 20
+  MAX_VERTICAL_POSITION = 460
 
-  IMAGE_WIDTH = 70
-  IMAGE_HEIGHT = 40
+  IMAGE_WIDTH = 40
+  IMAGE_HEIGHT = 70
 
   attr_accessor :velocity, :direction
 
@@ -53,7 +53,7 @@ class Player
       @x_position,
       @y_position,
       @z_position,
-      self.direction*180/Math::PI+180,
+      self.direction*180/Math::PI+90,
       0.5, 0.5,
       @horizontal_scale,
       @vertical_scale,
