@@ -1,26 +1,34 @@
 require 'gosu'
+require_relative './school_of_fish'
 require_relative './input_control'
+require_relative './waves'
+
 
 class Window < Gosu::Window
   def initialize(player, width: 640, height: 480)
     super width, height
     self.caption = 'Sailor Game'
     @player = player
+    @waves = Waves.new
     @input = InputControl.new(@player)
+    @fishies = SchoolOfFish.new( 300, 200)
   end
 
   def update
     dt = delta_time
     @input.update(dt)
+    @waves.update
     @player.update(dt) # update player
+    @fishies.update(dt)
   end
 
   def draw
+    @waves.draw
     @player.draw # draw player
+    @fishies.draw
   end
 
   private
-
     def delta_time
       @last_elapsed ||= Gosu::milliseconds()
       elapsed = Gosu::milliseconds()
