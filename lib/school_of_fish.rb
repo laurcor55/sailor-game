@@ -4,10 +4,10 @@ class SchoolOfFish
   IMAGE_WIDTH = 50
   IMAGE_HEIGHT = 50
 
-  def initialize(x, y)
+  def initialize(x, y, z)
     @x_position = x
     @y_position = y
-    @z_position = 0
+    @z_position = z
     @x_fish_speed = 0.1
     @y_fish_speed = 0.1
 
@@ -37,7 +37,7 @@ class SchoolOfFish
         @z_position,
         (tile_index % 2 == 0 ? @rotation : -1 * @rotation) / (1 + tile_index),
         0.5,0.5,1,1,
-        0x50_FF75A6C6
+        0x50_000000
       )
     end
   end

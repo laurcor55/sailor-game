@@ -2,16 +2,18 @@ require 'gosu'
 require_relative './school_of_fish'
 require_relative './input_control'
 require_relative './waves'
+require_relative './z_positions'
 
 
 class Window < Gosu::Window
+
   def initialize(player, width: 640, height: 480)
     super width, height
     self.caption = 'Sailor Game'
     @player = player
     @waves = Waves.new
     @input = InputControl.new(@player)
-    @fishies = SchoolOfFish.new( 300, 200)
+    @fishies = SchoolOfFish.new(300, 200, ZPositions::SUBMERGED)
   end
 
   def update

@@ -9,10 +9,10 @@ class Player
 
   attr_accessor :velocity, :direction
 
-  def initialize(x, y)
+  def initialize(x, y, z)
     @x_position = x # store the horizontal
     @y_position = y # and vertical positions
-    @z_position = 0 # (not worried about z just yet)
+    @z_position = z # and z
 
     self.velocity = 0 # velocity stored in polar magnitude
     self.direction = 0 # and angle
