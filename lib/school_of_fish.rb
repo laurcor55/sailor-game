@@ -1,15 +1,17 @@
-require 'gosu'
+require_relative './player'
 
 class SchoolOfFish
   IMAGE_WIDTH = 50
   IMAGE_HEIGHT = 50
 
-  def initialize(x, y, z)
+  def initialize(x, y, z, player)
     @x_position = x
     @y_position = y
     @z_position = z
     @x_fish_speed = 0.1
     @y_fish_speed = 0.1
+
+    @player = player
 
     @rotation_speed = Math::PI / 50
     @rotation = 0
@@ -19,6 +21,7 @@ class SchoolOfFish
   end
 
   def update(dt)
+    puts @player.x_position
     if (rand<0.01)
       @x_fish_speed = 1*rand-0.5
     elsif (rand<0.01)
