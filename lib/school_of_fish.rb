@@ -12,6 +12,7 @@ class SchoolOfFish
     @x_fish_speed = 0.1
     @y_fish_speed = 0.1
     @school_density = 0.5
+    @school_size = 1
 
     @color_a = 128
     @color_r = 0
@@ -37,6 +38,7 @@ class SchoolOfFish
 
     if(@dispersing)
       decrease_density(dt)
+      shrink(dt)
       fade_out(dt)
       bluer(dt) 
       done_dispersing
@@ -66,13 +68,17 @@ class SchoolOfFish
         @y_position,
         @z_position,
         (tile_index % 2 == 0 ? @rotation : -1 * @rotation) / (1 + tile_index),
-        @school_density,@school_density,1,1,
+        @school_density,@school_density,@school_size,@school_size,
         color
       )
     end
   end
 
   private
+
+  def shrink(dt)
+    @school_size += -dt*(1/10000.to_f)
+  end
 
   def decrease_density(dt)
     @school_density += -dt*(0.5/700.to_f)
