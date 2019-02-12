@@ -8,7 +8,7 @@ class Player
   IMAGE_HEIGHT = 70
 
   attr_accessor :velocity, :direction
-  attr_reader :x_position
+  attr_reader :x_position, :y_position
 
   def initialize(x, y, z)
     @x_position = x # store the horizontal
@@ -66,6 +66,10 @@ class Player
 
   def x_position
     @x_position
+  end
+
+  def y_position
+    @y_position
   end
 
   private

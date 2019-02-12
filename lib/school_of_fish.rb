@@ -24,7 +24,6 @@ class SchoolOfFish
     @rotation_speed = Math::PI / 50
     @rotation = 0
     
-
     @image_tiles = Gosu::Image.load_tiles('media/school.png', 50, 50)
     @number_tiles = @image_tiles.length
   end
@@ -35,6 +34,8 @@ class SchoolOfFish
     elsif (rand<0.01)
       @y_fish_speed = 1*rand-0.5
     end
+
+    check_distance_to(@player)
 
     if(@dispersing)
       decrease_density(dt)
@@ -75,6 +76,13 @@ class SchoolOfFish
   end
 
   private
+  
+  def check_distance_to(object)
+    distance = Math.sqrt((object.y_position-@y_position)**2 + (object.x_position-@x_position)**2)
+    if (distance < 10)
+      @dispersing = true
+    end
+  end
 
   def shrink(dt)
     @school_size += -dt*(1/10000.to_f)
