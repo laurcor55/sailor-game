@@ -1,3 +1,4 @@
+require 'gosu'
 require_relative './player'
 
 class SchoolOfFish
@@ -35,7 +36,18 @@ class SchoolOfFish
       @y_fish_speed = 1*rand-0.5
     end
 
-    check_distance_to(@player)
+    @x_position += @x_fish_speed
+    @y_position += @y_fish_speed
+    @rotation += dt*@rotation_speed
+
+    disperse(dt)
+  end
+
+  def disperse(dt)
+    distance = check_distance_to(@player)
+    if (distance < 100)
+      @dispersing = true
+    end
 
     if(@dispersing)
       decrease_density(dt)
@@ -44,19 +56,10 @@ class SchoolOfFish
       bluer(dt) 
       done_dispersing
     end
-    
-    @x_position += @x_fish_speed
-    @y_position += @y_fish_speed
-    @rotation += dt*@rotation_speed
-  end
-
-  def disperse
-    @dispersing = true
   end
 
   def draw
-    
-    color = (
+      color = (
       @color_a.floor * (2**(3*8)) +
       @color_r.floor * (2**(2*8)) +
       @color_g.floor * (2**(1*8)) +
@@ -79,9 +82,7 @@ class SchoolOfFish
   
   def check_distance_to(object)
     distance = Math.sqrt((object.y_position-@y_position)**2 + (object.x_position-@x_position)**2)
-    if (distance < 10)
-      @dispersing = true
-    end
+    distance
   end
 
   def shrink(dt)

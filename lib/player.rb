@@ -64,14 +64,6 @@ class Player
     @font.draw_text("velocity: #{self.velocity}\ndirection: #{self.direction}", 0, 0, 0)
   end
 
-  def x_position
-    @x_position
-  end
-
-  def y_position
-    @y_position
-  end
-
   private
 
     def limit_position

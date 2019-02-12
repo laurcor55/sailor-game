@@ -10,15 +10,9 @@ class InputControl
 
   def update(dt)
     handle_motion_keys(dt)
-    disperse_fish_keys(dt)
   end
 
   private
-
-    def disperse_fish_keys(dt)
-      @window_object.disperse_fish if Gosu.button_down?(Gosu::KB_SPACE)
-
-    end
 
     def handle_motion_keys(dt)
       h = (Gosu.button_down?(Gosu::KB_LEFT) ? -1 : 0) + (Gosu.button_down?(Gosu::KB_RIGHT) ? 1 : 0)

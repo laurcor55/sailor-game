@@ -29,10 +29,6 @@ class Window < Gosu::Window
     @player.draw # draw player
     @fishies.draw
   end
-  
-  def disperse_fish
-    @fishies.disperse
-  end
 
   private
     def delta_time
