@@ -11,6 +11,7 @@ class SchoolOfFish
 
     @x_fish_speed = 0.1
     @y_fish_speed = 0.1
+    @school_density = 0.5
 
     @color_a = 128
     @color_r = 0
@@ -21,6 +22,7 @@ class SchoolOfFish
 
     @rotation_speed = Math::PI / 50
     @rotation = 0
+    
 
     @image_tiles = Gosu::Image.load_tiles('media/school.png', 50, 50)
     @number_tiles = @image_tiles.length
@@ -34,6 +36,7 @@ class SchoolOfFish
     end
 
     if(@dispersing)
+      decrease_density(dt)
       fade_out(dt)
       bluer(dt) 
       done_dispersing
@@ -63,13 +66,17 @@ class SchoolOfFish
         @y_position,
         @z_position,
         (tile_index % 2 == 0 ? @rotation : -1 * @rotation) / (1 + tile_index),
-        0.5,0.5,1,1,
+        @school_density,@school_density,1,1,
         color
       )
     end
   end
 
   private
+
+  def decrease_density(dt)
+    @school_density += -dt*(0.5/700.to_f)
+  end
 
   def fade_out(dt)
     if (@color_a > 0)
@@ -79,7 +86,7 @@ class SchoolOfFish
 
   def bluer(dt)
     if (@color_b < 255)
-      @color_b = @color_b + dt*(255/1000.to_f)
+      @color_b = @color_b + dt*(255/500.to_f)
     end
     
   end
@@ -93,6 +100,7 @@ class SchoolOfFish
     end
     if (@color_a==0 && @color_b==255)
       @dispersing = false
+      @school_density = 0.5
     end
   end
 
