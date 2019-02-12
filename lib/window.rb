@@ -12,7 +12,7 @@ class Window < Gosu::Window
     self.caption = 'Sailor Game'
     @player = player
     @waves = Waves.new
-    @input = InputControl.new(@player)
+    @input = InputControl.new(self, @player)
     @fishies = SchoolOfFish.new(300, 200, ZPositions::SUBMERGED, player)
   end
 
@@ -28,6 +28,10 @@ class Window < Gosu::Window
     @waves.draw
     @player.draw # draw player
     @fishies.draw
+  end
+  
+  def disperse_fish
+    @fishies.disperse
   end
 
   private

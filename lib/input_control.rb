@@ -3,15 +3,22 @@ require 'gosu'
 class InputControl
   MOTION_MAGNITUDE = 0.001
 
-  def initialize(player_object)
+  def initialize(window_object, player_object)
     @player_object = player_object
+    @window_object = window_object
   end
 
   def update(dt)
     handle_motion_keys(dt)
+    disperse_fish_keys(dt)
   end
 
   private
+
+    def disperse_fish_keys(dt)
+      @window_object.disperse_fish if Gosu.button_down?(Gosu::KB_SPACE)
+
+    end
 
     def handle_motion_keys(dt)
       h = (Gosu.button_down?(Gosu::KB_LEFT) ? -1 : 0) + (Gosu.button_down?(Gosu::KB_RIGHT) ? 1 : 0)
