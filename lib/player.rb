@@ -17,7 +17,9 @@ class Player
     self.velocity = 0 # velocity stored in polar magnitude
     self.direction = 0 # and angle
 
-    @image = Gosu::Image.new('media/player.png') # just a png of a circle
+    @image = Gosu::Image.new('media/player.png')
+    @oar1 = Gosu::Image.new('media/oar1.png')
+    @oar2 = Gosu::Image.new('media/oar2.png')
     @vertical_scale = IMAGE_HEIGHT.to_f / @image.height
     @horizontal_scale = IMAGE_WIDTH.to_f / @image.width
 
@@ -45,10 +47,12 @@ class Player
     v_velocity = dt * self.velocity * Math.sin(self.direction)
     @x_position += h_velocity
     @y_position += v_velocity
+    @oar_angle = 15*Math.sin(Gosu::milliseconds()/100)+15
     limit_position
   end
 
   def draw
+    
     @image.draw_rot(
       @x_position,
       @y_position,
@@ -57,8 +61,26 @@ class Player
       0.5, 0.5,
       @horizontal_scale,
       @vertical_scale,
+      )
+    @oar1.draw_rot(
+      @x_position,
+      @y_position,
+      @z_position,
+      self.direction*180/Math::PI+90+@oar_angle,
+      0, 0,
+      @horizontal_scale,
+      @vertical_scale,
+      )
+    @oar2.draw_rot(
+      @x_position,
+      @y_position,
+      @z_position,
+      self.direction*180/Math::PI+90-@oar_angle,
+      1, 1,
+      @horizontal_scale,
+      @vertical_scale,
+      )
       
-    )
 
     @font.draw_text("velocity: #{self.velocity}\ndirection: #{self.direction}", 0, 0, 0)
   end
