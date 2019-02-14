@@ -40,23 +40,9 @@ class SchoolOfFish
     @y_position += @y_fish_speed
     @rotation += dt*@rotation_speed
 
-    disperse(dt)
+    update_dispersing(dt)
   end
 
-  def disperse(dt)
-    distance = check_distance_to(@player)
-    if (distance < 100)
-      @dispersing = true
-    end
-
-    if(@dispersing)
-      decrease_density(dt)
-      shrink(dt)
-      fade_out(dt)
-      bluer(dt) 
-      done_dispersing
-    end
-  end
 
   def draw
       color = (
@@ -79,44 +65,51 @@ class SchoolOfFish
   end
 
   private
-  
-  def check_distance_to(object)
-    distance = Math.sqrt((object.y_position-@y_position)**2 + (object.x_position-@x_position)**2)
-    distance
-  end
 
-  def shrink(dt)
-    @school_size += -dt*(1/10000.to_f)
-  end
-
-  def decrease_density(dt)
-    @school_density += -dt*(0.5/700.to_f)
-  end
-
-  def fade_out(dt)
-    if (@color_a > 0)
-      @color_a = @color_a - dt*(255/2000.to_f)
-    end
-  end
-
-  def bluer(dt)
-    if (@color_b < 255)
-      @color_b = @color_b + dt*(255/500.to_f)
+    def update_dispersing(dt)
+      if(@dispersing)
+        decrease_density(dt)
+        shrink(dt)
+        fade_out(dt)
+        bluer(dt)
+        check_if_done_dispersing
+      else
+        distance = check_distance_to(@player)
+        @dispersing = distance < 100
+      end
     end
     
-  end
+    def check_distance_to(object)
+      distance = Math.sqrt((object.y_position-@y_position)**2 + (object.x_position-@x_position)**2)
+      distance
+    end
 
-  def done_dispersing
-    if (@color_b > 255)
-      @color_b = 255
+    def shrink(dt)
+      @school_size += -dt*(1/10000.to_f)
     end
-    if (@color_a < 0)
-      @color_a = 0
+
+    def decrease_density(dt)
+      @school_density += -dt*(0.5/700.to_f)
     end
-    if (@color_a==0 && @color_b==255)
-      @dispersing = false
-      @school_density = 0.5
+
+    def fade_out(dt)
+      if (@color_a > 0)
+        @color_a = @color_a - dt*(255/2000.to_f)
+      end
     end
-  end
+
+    def bluer(dt)
+      if (@color_b < 255)
+        @color_b = @color_b + dt*(255/500.to_f)
+      end
+      
+    end
+
+    def check_if_done_dispersing
+      if (@color_a<0 || @color_b>255)
+        @dispersing = false
+        initialize(rand(640), rand(480), 50, @player)
+      end
+    end
 
 end
