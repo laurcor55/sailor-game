@@ -9,21 +9,13 @@ class SchoolOfFish
     @x_position = x
     @y_position = y
     @z_position = z
-
-    @x_fish_speed = 0.1
-    @y_fish_speed = 0.1
-    @school_density = 0.5
-    @school_size = 1
-
-    @color_a = 128
-    @color_r = 0
-    @color_g = 0
-    @color_b = 0
-
-    @player = player
+    
+    set_base_parameters
 
     @rotation_speed = Math::PI / 50
     @rotation = 0
+
+    @player = player
     
     @image_tiles = Gosu::Image.load_tiles('media/school.png', 50, 50)
     @number_tiles = @image_tiles.length
@@ -67,12 +59,18 @@ class SchoolOfFish
   private
 
     def update_dispersing(dt)
-      if(@dispersing)
-        decrease_density(dt)
-        shrink(dt)
-        fade_out(dt)
-        bluer(dt)
+      if (@dispersing)
+        density_change(dt, 0.001)
+        size_change(dt, -0.001)
+        alpha_change(dt, -0.001)
+        blue_change(dt, -0.255)
         check_if_done_dispersing
+      elsif (@regrouping)
+        density_change(dt, -0.001)
+        size_change(dt, 0.001)
+        alpha_change(dt, 0.001)
+        blue_change(dt, 0.255)
+        check_if_done_regrouping
       else
         distance = check_distance_to(@player)
         @dispersing = distance < 100
@@ -84,32 +82,49 @@ class SchoolOfFish
       distance
     end
 
-    def shrink(dt)
-      @school_size += -dt*(1/10000.to_f)
+    def size_change(dt, rate)
+      @school_size += dt*(rate.to_f)*@school_size
     end
 
-    def decrease_density(dt)
-      @school_density += -dt*(0.5/700.to_f)
+    def density_change(dt, rate)
+      @school_density += dt*(rate.to_f)*@school_density
     end
 
-    def fade_out(dt)
-      if (@color_a > 0)
-        @color_a = @color_a - dt*(255/2000.to_f)
-      end
+    def alpha_change(dt, rate)
+      @color_a += dt*(rate.to_f)*@color_a
     end
 
-    def bluer(dt)
-      if (@color_b < 255)
-        @color_b = @color_b + dt*(255/500.to_f)
-      end
-      
+    def blue_change(dt, rate)
+      @color_b += dt*(rate.to_f)*@color_b
+    end
+
+    def set_base_parameters
+      @x_fish_speed = 0.1
+      @y_fish_speed = 0.1
+
+      @school_density = 0.5
+      @school_size = 1
+  
+      @color_a = 128
+      @color_r = 0
+      @color_g = 0
+      @color_b = 0
     end
 
     def check_if_done_dispersing
-      if (@color_a<0 || @color_b>255)
+      if (@school_size<0.1)
         @dispersing = false
-        initialize(rand(640), rand(480), 50, @player)
+        @regrouping = true
       end
     end
+
+    def check_if_done_regrouping
+      if (@school_size>1)
+        @regrouping = false
+        @dispersing = false
+        set_base_parameters
+      end
+    end
+
 
 end
