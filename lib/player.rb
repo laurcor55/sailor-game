@@ -4,8 +4,8 @@ class Player
   MIN_VERTICAL_POSITION = 20
   MAX_VERTICAL_POSITION = 460
 
-  IMAGE_WIDTH = 40
-  IMAGE_HEIGHT = 70
+  IMAGE_WIDTH = 70
+  IMAGE_HEIGHT = 50
 
   attr_accessor :velocity, :direction
 
@@ -17,12 +17,14 @@ class Player
     self.velocity = 0 # velocity stored in polar magnitude
     self.direction = 0 # and angle
 
-    @image = Gosu::Image.new('media/player.png')
-    @oar1 = Gosu::Image.new('media/oar1.png')
-    @oar2 = Gosu::Image.new('media/oar2.png')
-    @vertical_scale = IMAGE_HEIGHT.to_f / @image.height
-    @horizontal_scale = IMAGE_WIDTH.to_f / @image.width
+    @image_tiles = Gosu::Image.load_tiles('media/player.png', 829, 529)
+    @number_tiles = @image_tiles.length
 
+    @oar_angle = [0, 0, 0]
+
+    @vertical_scale = IMAGE_HEIGHT.to_f / @image_tiles[1].height
+    @horizontal_scale = IMAGE_WIDTH.to_f / @image_tiles[1].width
+ 
     @font = Gosu::Font.new(20) # for debugging
   end
 
@@ -34,7 +36,9 @@ class Player
     v_velocity = self.velocity * Math.sin(self.direction) + delta_v_velocity
 
     self.velocity = Math.sqrt(h_velocity*h_velocity + v_velocity*v_velocity)
-    self.direction = Math.atan2(v_velocity, h_velocity)
+    set_direction(h_velocity, v_velocity)
+
+    move_oars
   end
 
   def halt
@@ -45,47 +49,34 @@ class Player
   def update(dt)
     h_velocity = dt * self.velocity * Math.cos(self.direction)
     v_velocity = dt * self.velocity * Math.sin(self.direction)
+
     @x_position += h_velocity
     @y_position += v_velocity
-    @oar_angle = 15*Math.sin(Gosu::milliseconds()/100)+15
+    
     limit_position
   end
 
   def draw
-    
-    @image.draw_rot(
-      @x_position,
-      @y_position,
-      @z_position,
-      self.direction*180/Math::PI+90,
-      0.5, 0.5,
-      @horizontal_scale,
-      @vertical_scale,
+    @image_tiles.each.with_index do |tile, tile_index|
+      tile.draw_rot(
+        @x_position,
+        @y_position,
+        @z_position-tile_index%2,
+        self.direction*180/Math::PI + (tile_index%2-1)*@oar_angle[tile_index],
+        0.5,1-0.5*tile_index,
+        @horizontal_scale,
+        @vertical_scale,
       )
-    @oar1.draw_rot(
-      @x_position,
-      @y_position,
-      @z_position,
-      self.direction*180/Math::PI+90+@oar_angle,
-      0, 0,
-      @horizontal_scale,
-      @vertical_scale,
-      )
-    @oar2.draw_rot(
-      @x_position,
-      @y_position,
-      @z_position,
-      self.direction*180/Math::PI+90-@oar_angle,
-      1, 1,
-      @horizontal_scale,
-      @vertical_scale,
-      )
-      
+    end
 
     @font.draw_text("velocity: #{self.velocity}\ndirection: #{self.direction}", 0, 0, 0)
   end
 
   private
+    def move_oars
+      @oar_angle[0] = 15 * Math.sin(Gosu::milliseconds()/100) + 15
+      @oar_angle[2] = -(15 * Math.sin(Gosu::milliseconds()/100) + 15)
+    end
 
     def limit_position
       if @x_position < MIN_HORIZONTAL_POSITION
@@ -108,12 +99,16 @@ class Player
     def set_horizontal_velocity(new_h_velocity)
       v_velocity = self.velocity * Math.sin(self.direction)
       self.velocity = Math.sqrt(new_h_velocity*new_h_velocity + v_velocity*v_velocity)
-      self.direction = Math.atan2(v_velocity, new_h_velocity)
+      set_direction(new_h_velocity, v_velocity)
     end
 
     def set_vertical_velocity(new_v_velocity)
       h_velocity = self.velocity * Math.cos(self.direction)
       self.velocity = Math.sqrt(h_velocity*h_velocity + new_v_velocity*new_v_velocity)
-      self.direction = Math.atan2(new_v_velocity, h_velocity)
+      set_direction(h_velocity, new_v_velocity)
+    end
+
+    def set_direction(h_velocity, v_velocity)
+      self.direction = Math.atan2(v_velocity, h_velocity)
     end
 end
