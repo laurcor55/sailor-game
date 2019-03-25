@@ -5,36 +5,67 @@ class SchoolOfFish
   IMAGE_HEIGHT = 50
 
   def initialize(x, y, z)
-    @x_position = x
-    @y_position = y
+    @fish_per_school = 10
+    @x_position = Array.new(@fish_per_school){|index| x}
+    @y_position = Array.new(@fish_per_school){|index| y}
+    @x_velocity = Array.new(@fish_per_school)
+    @y_velocity = Array.new(@fish_per_school)
+    @period = Array.new(@fish_per_school)
     @z_position = z
-    @x_fish_speed = 0.1
-    @y_fish_speed = 0.1
+    
 
-    @rotation_speed = Math::PI / 50
-    @rotation = 0
+    @target_x_position = 500
+    @target_y_position = 100
 
-    @image_tiles = Gosu::Image.load_tiles('media/school.png', 500, 155)
+    @direction = Array.new(@fish_per_school){|index| 0}
+    determine_velocity(17)
+    determine_period
+
+    @image_tiles = Gosu::Image.load_tiles('media/school.png', 50, 15)
     @number_tiles = @image_tiles.length
-    p @number_tiles
   end
 
   def update(dt)
-    @x_position += Math::cos(Gosu::milliseconds()/2000)
-    @y_position += Math::sin(Gosu::milliseconds()/2000*0.7)
-    @rotation += dt*@rotation_speed
+    if (Gosu::milliseconds()%10000==0)
+      determine_velocity(dt)
+      determine_period
+    end
+    y_bound = Math::sin(2*Math::PI*Gosu::milliseconds()/20000)
+    y_offset = Array.new(@fish_per_school)
+    y_offset.each.with_index do |array, index|
+      y_offset[index] = 0.5*Math::cos(2*Math::PI*Gosu::milliseconds()/(@period[index]))#*y_bound
+      @x_position[index] += @x_velocity[index]
+      @y_position[index] += @y_velocity[index] + y_offset[index]
+      @direction[index] = Math::atan((@y_velocity[index]+y_offset[index])/@x_velocity[index])*180/Math::PI
+    end
   end
 
+  def determine_period
+    @period.each.with_index do |array, index|
+      @period[index] = rand(1000..10000)
+    end
+    
+  end
+
+  def determine_velocity(dt)
+    @x_velocity.each.with_index do |array, index|
+      @x_velocity[index] = (@x_position[index]-@target_x_position)*dt/10000
+      @y_velocity[index] = (@y_position[index]-@target_y_position)*dt/10000
+    end
+  end
+  
   def draw
-    @image
-    @image_tiles.each.with_index do |tile, tile_index|
-      tile.draw_rot(
-        @x_position+Math::cos(Gosu::milliseconds()/2000*(tile_index+1)),
-        @y_position+Math::cos(Gosu::milliseconds()/2000*(tile_index+3)),
+    indeces = Array.new(@fish_per_school) {|index| index}
+    indeces.each.with_index do |index|
+      tile_index = indeces[index] % 2
+      single_fish = @image_tiles[tile_index]
+      single_fish.draw_rot(
+        @x_position[index],
+        @y_position[index],
         @z_position,
-        (tile_index % 2 == 0 ? @rotation : -1 * @rotation) / (1 + tile_index),
-        0.5,0.5,0.1,0.1,
-        0x90_000000
+        @direction[index],
+        0.5,0.5,0.75,0.75,
+        0x50_000000
       )
     end
   end
