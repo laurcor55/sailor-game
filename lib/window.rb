@@ -13,7 +13,7 @@ class Window < Gosu::Window
     @player = player
     @waves = Waves.new
     @input = InputControl.new(@player)
-    @fishies = SchoolOfFish.new(300, 200, ZPositions::SUBMERGED)
+    @fishies = SchoolOfFish.new(50, 50, ZPositions::SUBMERGED)
   end
 
   def update
