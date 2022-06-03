@@ -1,7 +1,9 @@
 require 'gosu'
 
 class InputControl
-  MOTION_MAGNITUDE = 0.0005
+
+  MOTION_MAGNITUDE = 0.0001
+
 
   def initialize(window_object, player_object)
     @player_object = player_object
