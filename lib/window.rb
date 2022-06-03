@@ -12,8 +12,8 @@ class Window < Gosu::Window
     self.caption = 'Sailor Game'
     @player = player
     @waves = Waves.new
-    @input = InputControl.new(@player)
-    @fishies = SchoolOfFish.new(300, 200, ZPositions::SUBMERGED)
+    @input = InputControl.new(self, @player)
+    @fishies = SchoolOfFish.new(300, 200, ZPositions::SUBMERGED, player)
   end
 
   def update
